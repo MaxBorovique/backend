@@ -3,11 +3,12 @@ import mongoose from "mongoose";
 import router from "./router.js";
 import fileUpload from "express-fileupload";
 import cors from 'cors';
+import dotenv from 'dotenv';
 
-const PORT = 1000;
-const DB_URL =
-  "mongodb+srv://user:user@cluster0.pcpnx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+dotenv.config();
 
+const PORT = process.env.PORT || 3000;
+const DB_URL = process.env.DB_URL;
 const app = express();
 
 app.use(express.json());
