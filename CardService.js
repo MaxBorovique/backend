@@ -46,9 +46,32 @@ class CardService {
     if (!card._id) {
       throw new Error("ID not provided");
     }
-    const updatedCard = await Card.findByIdAndUpdate(card._id, card, {
-      new: true,
-    });
+  
+    const existingCard = await Card.findById(card._id);
+    if (!existingCard) {
+      throw new Error("Card not found");
+    }
+  
+    const newImages = card.images || [];
+    const imageArray = Array.isArray(newImages) ? newImages : [newImages];
+  
+    const newFileNames = await Promise.all(
+      imageArray
+        .filter(image => typeof image !== 'string')
+        .map(image => FileService.saveFile(image))
+    );
+
+    const updatedImages = [
+      ...existingCard.images.filter(img => newImages.includes(img)),
+      ...newFileNames,
+    ];
+  
+    const updatedCard = await Card.findByIdAndUpdate(
+      card._id,
+      { ...card, images: updatedImages },
+      { new: true }
+    );
+  
     return updatedCard;
   }
 
