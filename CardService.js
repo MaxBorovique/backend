@@ -46,18 +46,7 @@ class CardService {
     if (!card._id) {
       throw new Error("ID not provided");
     }
-// Дістати по ID картку 
-// Порівнюю пейлоад картки з наявними картинками 
-
-    const fileNames = await Promise.all(
-      imageArray
-        .filter(image => image)
-        .map(image => FileService.saveFile(image))
-    );
-
-    const updatedCard = await Card.findByIdAndUpdate(card._id, {
-      ...card, 
-      images: fileNames,
+    const updatedCard = await Card.findByIdAndUpdate(card._id, card, {
       new: true,
     });
     return updatedCard;
