@@ -48,9 +48,6 @@ class CardService {
     }
 // Дістати по ID картку 
 // Порівнюю пейлоад картки з наявними картинками 
-    if (card.images) {
-
-    }
 
     const fileNames = await Promise.all(
       imageArray
