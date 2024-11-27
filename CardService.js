@@ -46,32 +46,23 @@ class CardService {
     if (!card._id) {
       throw new Error("ID not provided");
     }
-  
-    const existingCard = await Card.findById(card._id);
-    if (!existingCard) {
-      throw new Error("Card not found");
+// Дістати по ID картку 
+// Порівнюю пейлоад картки з наявними картинками 
+    if (card.images) {
+
     }
-  
-    const newImages = card.images || [];
-    const imageArray = Array.isArray(newImages) ? newImages : [newImages];
-  
-    const newFileNames = await Promise.all(
+
+    const fileNames = await Promise.all(
       imageArray
-        .filter(image => typeof image !== 'string')
+        .filter(image => image)
         .map(image => FileService.saveFile(image))
     );
 
-    const updatedImages = [
-      ...existingCard.images.filter(img => newImages.includes(img)),
-      ...newFileNames,
-    ];
-  
-    const updatedCard = await Card.findByIdAndUpdate(
-      card._id,
-      { ...card, images: updatedImages },
-      { new: true }
-    );
-  
+    const updatedCard = await Card.findByIdAndUpdate(card._id, {
+      ...card, 
+      images: fileNames,
+      new: true,
+    });
     return updatedCard;
   }
 
