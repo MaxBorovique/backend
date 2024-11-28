@@ -10,6 +10,5 @@ router.get('/cards', CardController.getAll);
 router.get('/cards/:id', CardController.getOne);
 router.put('/cards/:id', CardController.update);
 router.delete('/cards/:id', CardController.delete);
-router.patch('/cards/:id', CardController.update);
 
 export default router;
